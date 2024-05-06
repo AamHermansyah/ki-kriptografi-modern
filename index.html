@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enkripsi Modern - RSA by Aam Hermansyah</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    @layer components {
+      .tab-active {
+        @apply bg-blue-600 text-white;
+      }
+      .tab-inactive {
+        @apply hover:bg-gray-800 hover:text-white;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 h-screen flex items-center justify-center">
+  <form class="max-w-2xl mx-auto">
+    <h1 class="mb-4 text-5xl font-extrabold leading-none tracking-tight text-white">
+      Algoritma <span class="text-blue-500">RSA By</span> Aam H.
+    </h1>
+    <ul id="tab" class="grid grid-cols-2 text-sm font-medium text-center text-gray-400 py-4">
+      <li class="me-2">
+        <button type="button" class="w-full py-3 rounded-lg tab-active" aria-current="page">Enkripsi</button>
+      </li>
+      <li class="me-2">
+        <button type="button" class="w-full px-4 py-3 rounded-lg tab-inactive">Deskripsi</button>
+      </li>
+    </ul>
+
+    <div class="form-encryption">
+      <div>
+        <label for="msg-encryption" class="block mb-2 text-sm font-medium text-white">
+          Masukan Pesan
+        </label>
+        <input type="text" id="msg-encryption"
+          class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Tulis disini...">
+
+        <p id="helper-text-explanation" class="text-sm text-gray-400">
+          Jaga pesan rahasiamu agar selalu aman!
+        </p>
+      </div>
+
+      <div class="py-4">
+        <button id="btn-encryption" type="submit"
+          class="w-full text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+          Enkripsi
+        </button>
+      </div>
+    </div>
+
+    <div class="form-decryption hidden">
+      <div>
+        <label for="msg-descryption" class="block mb-2 text-sm font-medium text-white">
+          Masukan Pesan Rahasia
+        </label>
+        <input type="text" id="msg-descryption"
+          class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Tulis disini...">
+
+        <p id="helper-text-explanation" class="text-sm text-gray-400">
+          Ubah pesan rahasiamu agar bisa dibaca!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 mt-2">
+        <div>
+          <label for="private-key-input" class="block mb-2 text-sm font-medium text-white">
+            Private Key
+          </label>
+          <input type="text" id="private-key-input"
+            class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Private Key">
+        </div>
+        <div>
+          <label for="n-key-input" class="block mb-2 text-sm font-medium text-white">
+            N Key
+          </label>
+          <input type="text" id="n-key-input"
+            class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            placeholder="N Key">
+        </div>
+      </div>
+
+      <div class="py-4">
+        <button id="btn-descryption" type="submit"
+          class="w-full text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+          Deskripsi
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-2 space-y-2">
+      <div class="encryption-result">
+        <h4 class="mb-1 font-medium text-white text-center">RESULT</h4>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label for="result-pub-key" class="block mb-2 text-sm font-medium text-white">
+              Public Key
+            </label>
+            <input type="text" id="result-pub-key"
+              class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Public Key" readonly>
+          </div>
+          <div>
+            <label for="result-pri-key" class="block mb-2 text-sm font-medium text-white">
+              Private Key
+            </label>
+            <input type="text" id="result-pri-key"
+              class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Private Key" readonly>
+          </div>
+          <div>
+            <label for="result-n-key" class="block mb-2 text-sm font-medium text-white">
+              N Key
+            </label>
+            <input type="text" id="result-n-key"
+              class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+              placeholder="N Key" readonly>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-medium text-white text-center">Message:</h4>
+          <p id="result-msg-enc" class="text-gray-400">
+            -
+          </p>
+        </div>
+      </div>
+      <div class="descryption-result hidden">
+        <h4 class="font-medium text-white text-center">Message:</h4>
+        <p id="result-msg-des" class="text-gray-400">
+          -
+        </p>
+      </div>
+    </div>
+  </form>
+
+  <script src="./script.js"></script>
+  <script>
+    const tabBtns = document.querySelectorAll('#tab button');
+    const formEnc = document.querySelector('.form-encryption');
+    const formDes = document.querySelector('.form-decryption');
+    const encResult = document.querySelector('.encryption-result');
+    const desResult = document.querySelector('.descryption-result');
+
+    const tabContent = [formEnc, formDes];
+
+    tabBtns.forEach((btn, index) => {
+      btn.addEventListener('click', (e) => {
+        tabBtns.forEach((button) => {
+          button.classList.remove('tab-active');
+          button.classList.remove('tab-inactive');
+        });
+
+        tabContent.forEach((form) => {
+          if (!form.classList.contains('hidden')) form.classList.add('hidden');
+        });
+
+        encResult.classList.add('hidden');
+        desResult.classList.add('hidden');
+
+        if (btn.classList.contains('tab-active')) {
+          e.preventDefault();
+        } else {
+          btn.classList.remove('tab-inactive');
+          btn.classList.add('tab-active');
+          tabContent[index].classList.remove('hidden');
+          if (!index) encResult.classList.remove('hidden');
+          else desResult.classList.remove('hidden');
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
